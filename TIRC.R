@@ -14,6 +14,8 @@ TIRC <- function (x, title = "", header,
     if (length(dim(x)) != 2) 
         stop("Your table variable seems to have the wrong dimension, length(dim(x)) = ", 
              length(dim(x)), " != 2")
+    if (nrow(x) == 0)
+        x[1,] <- NA
     if (missing(rnames)) {
         if (any(is.null(rownames(x)) == FALSE)) 
             rnames <- rownames(x)
