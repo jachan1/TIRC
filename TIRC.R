@@ -9,7 +9,8 @@ TIRC <- function (x, title = "", header,
                          rgroupCSSseparator = "", tspanner, n.tspanner, tspannerCSSstyle = "font-weight: 900; text-transform:capitalize; text-align: center;", 
                          tspannerCSSseparator = "border-top: 1px solid grey;", rowlabel = title, 
                          rowlabel.pos = "bottom", headLines = "single", compatibility = "LibreOffice", 
-                         rnames, caption, caption.loc = "top", tfoot, label,zebra=F, highrows, TURK=F, ...) 
+                         rnames, caption, caption.loc = "top", tfoot, label,zebra=F, highrows, TURK=F,
+                  rsViewer=F,...)
 {
     if (length(dim(x)) != 2) 
         stop("Your table variable seems to have the wrong dimension, length(dim(x)) = ", 
@@ -30,7 +31,10 @@ TIRC <- function (x, title = "", header,
     if (!missing(rnames)) 
         set_rownames <- TRUE
     else set_rownames <- FALSE
-    if (missing(header)) 
+
+    if (rsViewer) 
+        header = paste0(colnames(x), "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
+    else if (missing(header))
         header = colnames(x)
     
     if (length(align) > 1) 
