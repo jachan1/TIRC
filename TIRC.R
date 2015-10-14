@@ -31,11 +31,12 @@ TIRC <- function (x, title = "", header,
     if (!missing(rnames)) 
         set_rownames <- TRUE
     else set_rownames <- FALSE
-
-    if (rsViewer) 
-        header = paste0(colnames(x), "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
-    else if (missing(header))
+    
+    if (missing(header))
         header = colnames(x)
+    
+    if (rsViewer) 
+        header = paste0(header, paste(rep("&nbsp;", 5), collapse=""))
     
     if (length(align) > 1) 
         align <- paste(align, collapse = "")
