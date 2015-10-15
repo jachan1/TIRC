@@ -9,8 +9,7 @@ TIRC <- function (x, title = "", header,
                          rgroupCSSseparator = "", tspanner, n.tspanner, tspannerCSSstyle = "font-weight: 900; text-transform:capitalize; text-align: center;", 
                          tspannerCSSseparator = "border-top: 1px solid grey;", rowlabel = title, 
                          rowlabel.pos = "bottom", headLines = "single", compatibility = "LibreOffice", 
-                         rnames, caption, caption.loc = "top", tfoot, label, zebra=F, highrows, TURK=F,
-                  rsViewer=F,...)
+                         rnames, caption, caption.loc = "top", tfoot, label, zebra=F, highrows, TURK=F,...)
 {
     if (length(dim(x)) != 2) 
         stop("Your table variable seems to have the wrong dimension, length(dim(x)) = ", 
@@ -377,23 +376,14 @@ TIRC <- function (x, title = "", header,
         }
     }
     
-    table_str <- "<style class='zebra' type='text/css'>
-    table.zebra tr:nth-of-type(even) td {background-color: #DDE8F0;}
+    zebra_str <- "table.zebra tr:nth-of-type(even) td {background-color: #DDE8F0;}
     table.zebra tr:nth-of-type(even) td[class='rgHead'] {background-color: transparent}
-    table.zebra tr td[class='subLast']{ border-bottom: 1px solid black};
-    </style>
-    <style class='rsViewer' type='text/css'>
-    table.rsViewer table, td, th {border: none; padding-right: 10px; padding-left: 10px;}
-    </style>"
-
-    if(zebra==T){
-        styl ="zebra"
-    } else if(rsViewer) {
-        styl = "rsViewer"
-    }
-    else {
-        styl='tirc_table'
-    }
+    table.zebra tr td[class='subLast']{border-bottom: 1px solid black}"
+    
+    table_str <- paste("<style type='text/css'>", ifelse(zebra, zebra_str,""), "</style>", sep="\n")
+    
+    styl=paste("'tirc_table", ifelse(zebra, "zebra",""), "'")
+    
     table_str <- sprintf("%s<table class=%s style='border-collapse: collapse;' %s>", 
                          table_str, styl, table_id)
     first_row = TRUE
@@ -564,12 +554,18 @@ print.TIRC <- function(x, useViewer, ...){
             args$file <- tempfile(fileext=".html")
         }
         
-        htmlPage <- paste("<html>",
+        spacing_styl <- "
+        <style type='text/css'>
+        table, td, th {border: none; padding-right: 6px; padding-left: 6px;}
+        </style>"
+        
+        htmlPage <- paste(spacing_styl,
+                        "<html>",
                           "<head>",
                           "<meta http-equiv=\"Content-type\" content=\"text/html; charset=UTF-8\">",
                           "</head>",
                           "<body>",
-                          "<div style=\"margin: 0 auto; display: table; margin-top: 1em;\">",
+                          "<div style=\"margin: 0 auto; display: table; margin-top: 1em; padding-top: 10px;\">",
                           x,
                           "</div>",
                           "</body>",
