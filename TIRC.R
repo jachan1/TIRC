@@ -9,7 +9,7 @@ TIRC <- function (x, title = "", header,
                          rgroupCSSseparator = "", tspanner, n.tspanner, tspannerCSSstyle = "font-weight: 900; text-transform:capitalize; text-align: center;", 
                          tspannerCSSseparator = "border-top: 1px solid grey;", rowlabel = title, 
                          rowlabel.pos = "bottom", headLines = "single", compatibility = "LibreOffice", 
-                         rnames, caption, caption.loc = "top", tfoot, label,zebra=F, highrows, TURK=F,
+                         rnames, caption, caption.loc = "top", tfoot, label, zebra=F, highrows, TURK=F,
                   rsViewer=F,...)
 {
     if (length(dim(x)) != 2) 
@@ -34,9 +34,6 @@ TIRC <- function (x, title = "", header,
     
     if (missing(header))
         header = colnames(x)
-    
-    if (rsViewer) 
-        header = paste0(header, paste(rep("&nbsp;", 5), collapse=""))
     
     if (length(align) > 1) 
         align <- paste(align, collapse = "")
@@ -379,14 +376,22 @@ TIRC <- function (x, title = "", header,
             total_columns <- total_columns + sum(cgroup_spacer_cells)
         }
     }
+    
     table_str <- "<style class='zebra' type='text/css'>
     table.zebra tr:nth-of-type(even) td {background-color: #DDE8F0;}
     table.zebra tr:nth-of-type(even) td[class='rgHead'] {background-color: transparent}
-    table.zebra tr td[class='subLast']{ border-bottom: 1px solid black;}
+    table.zebra tr td[class='subLast']{ border-bottom: 1px solid black};
+    </style>
+    <style class='rsViewer' type='text/css'>
+    table.rsViewer table, td, th {border: none; padding-right: 10px; padding-left: 10px;}
     </style>"
+
     if(zebra==T){
         styl ="zebra"
-    } else{
+    } else if(rsViewer) {
+        styl = "rsViewer"
+    }
+    else {
         styl='tirc_table'
     }
     table_str <- sprintf("%s<table class=%s style='border-collapse: collapse;' %s>", 
