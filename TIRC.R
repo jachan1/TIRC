@@ -1,13 +1,18 @@
 require(stringr)
+
+## do I want rowlabel=title?
+TIRC <- function(x) {
+  UseMethod("TIRC")
+}
 ## old align: paste(c("l", rep("c", ncol(x) - 1))
 ## old title: deparse(substitute(x))
 ## headLines can be single, double or none
-TIRC <- function (x, title = "", header, 
+TIRC.default <- function(x, title = "", header, 
                          align = paste(rep("l", ncol(x)), collapse=""), 
                          halign = paste(rep("l", ncol(x)), collapse = ""), cgroup, 
                          n.cgroup, cgroup.just, rgroup, n.rgroup, rgroupCSSstyle = "font-weight: bold", 
                          rgroupCSSseparator = "", tspanner, n.tspanner, tspannerCSSstyle = "font-weight: 900; text-transform:capitalize; text-align: center;", 
-                         tspannerCSSseparator = "border-top: 1px solid grey;", rowlabel = title, 
+                         tspannerCSSseparator = "border-top: 1px solid grey;", rowlabel=title, 
                          rowlabel.pos = "bottom", headLines = "single", compatibility = "LibreOffice", 
                          rnames, caption, caption.loc = "top", tfoot, label, zebra=F, highrows, TURK=F,...)
 {
@@ -520,6 +525,23 @@ TIRC <- function (x, title = "", header,
     return(table_str)
     }
 
+TIRC.table <- function(x, title = "", header, 
+                       align = paste(rep("l", ncol(x)), collapse=""), 
+                       halign = paste(rep("l", ncol(x)), collapse = ""), cgroup, 
+                       n.cgroup, cgroup.just, rgroup, n.rgroup, rgroupCSSstyle = "font-weight: bold", 
+                       rgroupCSSseparator = "", tspanner, n.tspanner, tspannerCSSstyle = "font-weight: 900; text-transform:capitalize; text-align: center;", 
+                       tspannerCSSseparator = "border-top: 1px solid grey;", rowlabel=title, 
+                       rowlabel.pos = "bottom", headLines = "single", compatibility = "LibreOffice", 
+                       rnames, caption, caption.loc = "top", tfoot, label, zebra=F, highrows, TURK=F,...) {
+  tmp <- as.data.frame.matrix(x, stringsAsFactors = F)
+  tmpnames <- names(dimnames(x))
+  if(missing(rowlabel)) rowlabel <- tmpnames[1]
+  if(missing(cgroup)) {
+    cgroup <- tmpnames[2]
+    n.cgroup <- ncol(tmp)
+  }
+  NextMethod("TIRC", tmp, rowlabel=rowlabel, cgroup=cgroup, n.cgroup=n.cgroup, rnames=rownames(tmp))
+}
 
 print.TIRC <- function(x, useViewer, ...){
     args <- attr(x, "...")
@@ -600,3 +622,4 @@ print.TIRC <- function(x, useViewer, ...){
     
     invisible(x)
 }
+
