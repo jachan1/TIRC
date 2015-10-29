@@ -1,7 +1,7 @@
 require(stringr)
 
 ## do I want rowlabel=title?
-TIRC <- function(x) {
+TIRC <- function(x, ...) {
   UseMethod("TIRC")
 }
 ## old align: paste(c("l", rep("c", ncol(x) - 1))
