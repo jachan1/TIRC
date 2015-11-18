@@ -24,8 +24,14 @@ TIRC.default <- function(x, title = "", header,
     if (missing(rnames)) {
         if (any(is.null(rownames(x)) == FALSE)) 
             rnames <- rownames(x)
-    } else if (length(rnames)==1 & rnames[1] == F) {
+    } else if (length(rnames)==1) {
+      if(rnames == F) {
         rnames <- rep("", nrow(x))
+      } else if(rnames %in% names(x)){
+        tmp_rnames <- rnames
+        rnames <- x[[rnames]]
+        x <- x[, names(x) != tmp_rnames]
+      }
     } else if (any(is.null(rownames(x))) && !missing(rgroup)) 
         warning("You have not specified rownames but you seem to have rgroups.", 
                 "If you have the first column as rnames but you want the rgroups", 
