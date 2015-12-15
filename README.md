@@ -12,7 +12,7 @@ Provides htmlTable functionality with IRCDA styling.
 
 ## Installation
 
-sample_tables.R provides instructions to source the function from github, or just download the file
+sample_tables.R provides instructions to source the function from github, or just download the file. See css file for css tags available to customize tables.
 
 ## Examples 
 
