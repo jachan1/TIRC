@@ -16,6 +16,7 @@ sample_tables.R provides instructions to source the function from github, or jus
 
 ## Examples 
 
+<table>
 <thead class=tirc_head>
 <tr>
 <th style='border-top: 2px solid grey;'></th>
@@ -40,6 +41,7 @@ sample_tables.R provides instructions to source the function from github, or jus
 </tbody>
 </table>
 
+<table>
 <thead class=tirc_head>
 <tr>
 <th style='border-bottom: 1px solid grey; border-top: 2px solid grey;'>&nbsp;</th>

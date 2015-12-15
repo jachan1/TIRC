@@ -10,7 +10,7 @@ source_https <- function(url, ...) {
 }
 
 # Example
-source_https("")
+source_https("https://raw.githubusercontent.com/jachan1/TIRC/master/TIRC.R")
 
 tab_data <- data_frame(rgrp=c("Early", "Early", "Late"),
                        rnms = c("A", "B", "C"), 
