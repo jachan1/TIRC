@@ -14,13 +14,22 @@ TIRC.default <- function(x, title = "", header,
                          rgroupCSSseparator = "", tspanner, n.tspanner, tspannerCSSstyle = "font-weight: 900; text-transform:capitalize; text-align: center;", 
                          tspannerCSSseparator = "border-top: 1px solid grey;", rowlabel=title, 
                          rowlabel.pos = "bottom", headLines = "single", compatibility = "LibreOffice", 
-                         rnames, caption, caption.loc = "top", tfoot, label, zebra=F, highrows, TURK=F,...)
+                         rnames, caption, caption.loc = "top", tfoot, label, zebra=F, highrows, TURK=F, rgroup_col,...)
 {
     if (length(dim(x)) != 2) 
         stop("Your table variable seems to have the wrong dimension, length(dim(x)) = ", 
              length(dim(x)), " != 2")
     if (nrow(x) == 0)
         x[1,] <- NA
+    
+    if(!missing(rgroup_col)){
+      if(rgroup_col %in% names(x)) {
+        rgroup <- unique(x[[rgroup_col]])
+        n.rgroup <- as.integer(table(x[[rgroup_col]])[rgroup])
+        x <- x[, !names(x) == rgroup_col]
+      }
+    }
+    
     if (missing(rnames)) {
         if (any(is.null(rownames(x)) == FALSE)) 
             rnames <- rownames(x)
