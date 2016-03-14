@@ -21,12 +21,14 @@ TIRC.default <- function(x, title = "", header,
              length(dim(x)), " != 2")
     if (nrow(x) == 0)
         x[1,] <- NA
+
     
     if(!missing(rgroup_col)){
       if(rgroup_col %in% names(x)) {
-        rgroup <- unique(x[[rgroup_col]])
-        n.rgroup <- as.integer(table(x[[rgroup_col]])[rgroup])
-        x <- x[, !names(x) == rgroup_col]
+        rgroup_var <- as.character(x[[rgroup_col]])
+        rgroup <- unique(rgroup_var)
+        n.rgroup <- as.integer(table(rgroup_var)[rgroup])
+        x <- x[!names(x) == rgroup_col]
       }
     }
     
@@ -38,8 +40,8 @@ TIRC.default <- function(x, title = "", header,
         rnames <- rep("", nrow(x))
       } else if(rnames %in% names(x)){
         tmp_rnames <- rnames
-        rnames <- x[[rnames]]
-        x <- x[, names(x) != tmp_rnames]
+        rnames <- as.character(x[[rnames]])
+        x <- x[names(x) != tmp_rnames]
       }
     } else if (any(is.null(rownames(x))) && !missing(rgroup)) 
         warning("You have not specified rownames but you seem to have rgroups.", 
