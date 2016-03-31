@@ -22,12 +22,54 @@ TIRC.default <- function(x, title = "", header,
     if (nrow(x) == 0)
         x[1,] <- NA
 
+    fix_name <- function(nm, all_names){
+      if(nm %in% all_names) {
+        nm <- paste0(nm, " ")
+        fix_name(nm, all_names)
+      }
+      else nm
+    }
     
     if(!missing(rgroup_col)){
       if(rgroup_col %in% names(x)) {
         rgroup_var <- as.character(x[[rgroup_col]])
-        rgroup <- unique(rgroup_var)
-        n.rgroup <- as.integer(table(rgroup_var)[rgroup])
+        unique_grps <- c()
+        unique_grp_counts <- c()
+        in_grp <- F
+        tmp_count <- 0
+        new_name = ""
+        set_new_names = F
+        for(i in 1:length(rgroup_var)){
+          if(!in_grp){
+            in_grp <- T
+            tmp_count = 1
+            if(rgroup_var[i] %in% unique_grps) {
+              set_new_names = T
+              new_name <- fix_name(rgroup_var[i], unique_grps)
+              x[i, rgroup_col] <- new_name
+              unique_grps <- c(unique_grps, new_name)
+            } else {
+              unique_grps <- c(unique_grps, rgroup_var[i])
+            }
+          } else {
+            tmp_count = tmp_count + 1
+            if(set_new_names){
+              x[i, rgroup_col] <- new_name
+            }
+            if(i < length(rgroup_var)){
+              if(rgroup_var[i+1] != rgroup_var[i]){
+                in_grp <- F
+                set_new_names = F
+                unique_grp_counts <- c(unique_grp_counts, tmp_count)
+              }
+            } else {
+              unique_grp_counts <- c(unique_grp_counts, tmp_count)
+            }
+          }
+        }
+        
+        rgroup <- unique_grps
+        n.rgroup <- unique_grp_counts
         x <- x[!names(x) == rgroup_col]
       }
     }
@@ -173,6 +215,7 @@ TIRC.default <- function(x, title = "", header,
         header_str <- sprintf("%s\n</tr>", header_str)
         return(header_str)
     }
+    
     if (!missing(rgroup)) {
         if (missing(n.rgroup)) 
             stop("You need to specify the argument n.rgroup if you want to use rgroups")
