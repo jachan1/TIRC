@@ -447,7 +447,7 @@ TIRC.default <- function(x, title = "", header,
     
     table_str <- paste("<style type='text/css'>", ifelse(zebra, zebra_str,""), "</style>", sep="\n")
     
-    styl=paste("'tirc_table", ifelse(zebra, "zebra",""), "'")
+    styl=paste0("'tirc_table", ifelse(zebra, " zebra",""), "'")
     
     table_str <- sprintf("%s<table class=%s style='border-collapse: collapse;' %s>", 
                          table_str, styl, table_id)
