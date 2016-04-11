@@ -593,14 +593,22 @@ TIRC.table <- function(x, title = "", header,
                        tspannerCSSseparator = "border-top: 1px solid grey;", rowlabel=title, 
                        rowlabel.pos = "bottom", headLines = "single", compatibility = "LibreOffice", 
                        rnames, caption, caption.loc = "top", tfoot, label, zebra=F, highrows, TURK=F,...) {
-  tmp <- as.data.frame.matrix(x, stringsAsFactors = F)
-  tmpnames <- names(dimnames(x))
-  if(missing(rowlabel)) rowlabel <- tmpnames[1]
-  if(missing(cgroup)) {
-    cgroup <- tmpnames[2]
-    n.cgroup <- ncol(tmp)
+  if(length(dim(x)) == 1){
+    ## a single vector table will be printed long.
+    tmp <- data.frame(x)
+    TIRC.default(tmp, rnames="Var1") ## calculated variables won't work because number of columns has changed.
+    # NextMethod("TIRC", x=tmp, rnames="Var1")
+  } else {
+    tmp <- as.data.frame.matrix(x, stringsAsFactors = F)
+    tmpnames <- names(dimnames(x))
+    
+    if(missing(rowlabel)) rowlabel <- tmpnames[1]
+    if(missing(cgroup)) {
+      cgroup <- tmpnames[2]
+      n.cgroup <- ncol(tmp)
+    }
+    NextMethod("TIRC", x=tmp, rowlabel=rowlabel, cgroup=cgroup, n.cgroup=n.cgroup, rnames=rownames(tmp))
   }
-  NextMethod("TIRC", tmp, rowlabel=rowlabel, cgroup=cgroup, n.cgroup=n.cgroup, rnames=rownames(tmp))
 }
 
 print.TIRC <- function(x, useViewer, ...){
