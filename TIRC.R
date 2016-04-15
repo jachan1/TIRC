@@ -29,7 +29,6 @@ TIRC.default <- function(x, title = "", header,
       }
       else nm
     }
-    
     if(!missing(rgroup_col)){
       if(rgroup_col %in% names(x)) {
         rgroup_var <- as.character(x[[rgroup_col]])
@@ -51,6 +50,7 @@ TIRC.default <- function(x, title = "", header,
             } else {
               unique_grps <- c(unique_grps, rgroup_var[i])
             }
+            
           } else {
             tmp_count = tmp_count + 1
             if(set_new_names){
@@ -62,12 +62,10 @@ TIRC.default <- function(x, title = "", header,
                 set_new_names = F
                 unique_grp_counts <- c(unique_grp_counts, tmp_count)
               }
-            } else {
-              unique_grp_counts <- c(unique_grp_counts, tmp_count)
             }
           }
         }
-        
+        unique_grp_counts <- c(unique_grp_counts, tmp_count)
         rgroup <- unique_grps
         n.rgroup <- unique_grp_counts
         x <- x[!names(x) == rgroup_col]
